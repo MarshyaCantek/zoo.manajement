@@ -92,7 +92,7 @@ while True:
 
         nama = input("Nama Hewan  : ")
         jenis = input("Jenis Hewan : ")
-        kelamin = input("Kelamin Hewan : ")
+        kelamin = input("Jenis Kelamin Hewan (Betina / Jantan) : ")
         umur = input("Umur Hewan  : ")
 
         hewan = HewanKebunBinatang(
@@ -130,7 +130,6 @@ Pilihan Kandang:
 1. Kandang Anak-anak
 2. Kandang Umum
 3. Kandang Kawin
-4. Kandang Isolasi
 """)
 
             pilih = input("Pilih kandang : ")
@@ -139,7 +138,6 @@ Pilihan Kandang:
                 "1": "Kandang Anak-anak",
                 "2": "Kandang Umum",
                 "3": "Kandang Kawin",
-                "4": "Kandang Isolasi"
             }
 
             if pilih in kandang:
