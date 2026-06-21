@@ -1,29 +1,34 @@
-# Import class yang dibutuhkan
 from hewan import Hewan
 from kandang import Kandang
 from perawatan import Perawatan
 
+# CLASS HEWAN KEBUN BINATANG
+# Pilar OOP:
+# Inheritance
+# Polymorphism
 
-# ==================================================
-# INHERITANCE
-# Class ini mewarisi class Hewan
-# ==================================================
 class HewanKebunBinatang(Hewan):
 
-    def __init__(self, nama, jenis, kelamin, umur):
+    def __init__(self, nama, jenis, jenis_kelamin, umur):
 
-        # Memanggil constructor parent
         super().__init__(
             nama,
             jenis,
-            kelamin,
-            umur
+            jenis_kelamin,
+            umur            
         )
 
-        # Membuat objek kandang
-        self.kandang = Kandang("Kandang Umum")
+        # Kandang awal
+        self.kandang = Kandang(
+            "Kandang Umum"
+        )
 
-        # Membuat objek perawatan
+        # Menyimpan kandang sebelum sakit
+        self.kandang_sebelumnya = (
+            "Kandang Umum"
+        )
+
+        # Objek perawatan
         self.perawatan = Perawatan()
 
         # Data makan
@@ -31,23 +36,19 @@ class HewanKebunBinatang(Hewan):
         self.jam_makan = "-"
         self.jadwal_makan_berikutnya = "-"
 
-    # ==================================================
-    # Menyimpan data pemberian makan
-    # ==================================================
+    # UPDATE DATA MAKAN
     def beri_makan(
         self,
         makanan,
         jam,
-        jadwal_berikutnya
+        jadwal="-"
     ):
 
         self.jenis_makanan = makanan
         self.jam_makan = jam
-        self.jadwal_makan_berikutnya = jadwal_berikutnya
+        self.jadwal_makan_berikutnya = jadwal
 
-    # ==================================================
-    # Memindahkan kandang hewan
-    # ==================================================
+    # PINDAH KANDANG
     def pindah_kandang(
         self,
         kandang_baru
@@ -57,9 +58,7 @@ class HewanKebunBinatang(Hewan):
             kandang_baru
         )
 
-    # ==================================================
-    # Menyimpan data kesehatan
-    # ==================================================
+    # CATAT KESEHATAN
     def catat_kesehatan(
         self,
         kondisi,
@@ -71,24 +70,58 @@ class HewanKebunBinatang(Hewan):
             jam
         )
 
-    # ==================================================
     # POLYMORPHISM
-    # Override abstract method dari class Hewan
-    # ==================================================
+    # Override method abstract
     def tampilkan_info(self):
 
         print("\n===== DETAIL HEWAN =====")
 
-        print("Nama                :", self.get_nama())
-        print("Jenis Hewan         :", self.get_jenis())
-        print("Kelamin             :", self.get_kelamin())
-        print("Umur                :", self.get_umur())
+        print(
+            "Nama                :",
+            self.get_nama()
+        )
 
-        print("Kandang             :", self.kandang.get_nama_kandang())
+        print(
+            "Jenis Hewan         :",
+            self.get_jenis()
+        )
 
-        print("Jenis Makanan       :", self.jenis_makanan)
-        print("Jam Diberi Makan    :", self.jam_makan)
-        print("Jadwal Berikutnya   :", self.jadwal_makan_berikutnya)
+        print(
+            "Jenis Kelamin       :",
+            self.get_jenis_kelamin()
+        )
 
-        print("Kondisi Hewan       :", self.perawatan.get_kondisi())
-        print("Jadwal Pemeriksaan  :", self.perawatan.get_jam_pemeriksaan())
+        print(
+            "Umur                :",
+            self.get_umur()
+        )
+
+        print(
+            "Kandang             :",
+            self.kandang.get_nama_kandang()
+        )
+
+        print(
+            "Jenis Makanan       :",
+            self.jenis_makanan
+        )
+
+        print(
+            "Jam Diberi Makan    :",
+            self.jam_makan
+        )
+
+        print(
+            "Jadwal Makan Berikut:",
+            self.jadwal_makan_berikutnya
+        )
+
+        print(
+            "Kondisi Hewan       :",
+            self.perawatan.get_kondisi()
+        )
+
+        print(
+            "Jadwal Pemeriksaan  :",
+            self.perawatan.get_jam_pemeriksaan()
+        )
