@@ -1,9 +1,16 @@
+# ==================================================
+# CLASS PERAWATAN
+# Menyimpan data kesehatan hewan
+# ==================================================
 class Perawatan:
 
     def __init__(self):
 
+        # Kondisi awal hewan
         self.__kondisi = "Sehat"
-        self.__jam_pemeriksaan = "-"
+
+        # Jadwal pemeriksaan default
+        self.__jam_pemeriksaan = "1 Bulan Sekali"
 
     # Getter
     def get_kondisi(self):
@@ -19,6 +26,7 @@ class Perawatan:
     def set_jam_pemeriksaan(self, jam):
         self.__jam_pemeriksaan = jam
 
+    # Menyimpan hasil pemeriksaan kesehatan
     def catat_kondisi(self, kondisi, jam):
 
         self.__kondisi = kondisi

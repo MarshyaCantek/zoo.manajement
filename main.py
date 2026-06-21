@@ -1,12 +1,25 @@
+# ==================================================
+# IMPORT MODULE
+# ==================================================
+
+# Mengimpor class HewanKebunBinatang dari file terpisah
 from hewan_kebun_binatang import HewanKebunBinatang
 
-# Menyimpan seluruh objek hewan
+# Digunakan untuk menghitung jadwal makan berikutnya
+from datetime import datetime, timedelta
+
+
+# ==================================================
+# MENYIMPAN SELURUH DATA HEWAN
+# ==================================================
 daftar_hewan = []
 
 
-# =====================================
-# Mencari hewan berdasarkan nama
-# =====================================
+# ==================================================
+# FUNGSI MENCARI HEWAN BERDASARKAN NAMA
+# Digunakan pada menu pindah kandang,
+# cek kesehatan, cek data, dan hapus data
+# ==================================================
 def cari_hewan(nama):
 
     for hewan in daftar_hewan:
@@ -17,33 +30,38 @@ def cari_hewan(nama):
     return None
 
 
-# =====================================
-# Menampilkan seluruh data hewan
-# =====================================
+# ==================================================
+# MENAMPILKAN SELURUH DATA HEWAN DALAM TABEL
+# (READ DATA)
+# ==================================================
 def tampilkan_semua():
 
+    # Jika belum ada data hewan
     if not daftar_hewan:
 
         print("\nBelum ada data hewan.")
         return
 
-    print("\n" + "=" * 145)
+    print("\n" + "=" * 190)
 
+    # Header tabel
     print(
         f"{'No':<4}"
         f"{'Nama':<15}"
-        f"{'Jenis Hewan':<15}"
+        f"{'Jenis':<15}"
         f"{'Kelamin':<10}"
-        f"{'Umur':<8}"
+        f"{'Umur':<12}"
         f"{'Kandang':<20}"
         f"{'Makanan':<15}"
-        f"{'Jam Di BeriMakan':<12}"
-        f"{'Kondisi Hewan':<20}"
-        f"{'Jam Cek Kesehatan':<12}"
+        f"{'Jam Makan':<12}"
+        f"{'Jadwal Berikutnya':<18}"
+        f"{'Kondisi':<15}"
+        f"{'Jadwal Cek':<20}"
     )
 
-    print("=" * 145)
+    print("=" * 190)
 
+    # Menampilkan seluruh data hewan
     for no, hewan in enumerate(daftar_hewan, start=1):
 
         print(
@@ -51,20 +69,21 @@ def tampilkan_semua():
             f"{hewan.get_nama():<15}"
             f"{hewan.get_jenis():<15}"
             f"{hewan.get_kelamin():<10}"
-            f"{hewan.get_umur():<8}"
+            f"{hewan.get_umur():<12}"
             f"{hewan.kandang.get_nama_kandang():<20}"
             f"{hewan.jenis_makanan:<15}"
             f"{hewan.jam_makan:<12}"
-            f"{hewan.perawatan.get_kondisi():<20}"
-            f"{hewan.perawatan.get_jam_pemeriksaan():<12}"
+            f"{hewan.jadwal_makan_berikutnya:<18}"
+            f"{hewan.perawatan.get_kondisi():<15}"
+            f"{hewan.perawatan.get_jam_pemeriksaan():<20}"
         )
 
-    print("=" * 145)
 
-
-# =====================================
+# ==================================================
 # PROGRAM UTAMA
-# =====================================
+# Menampilkan menu secara berulang
+# sampai user memilih keluar
+# ==================================================
 while True:
 
     print("""
@@ -75,69 +94,100 @@ while True:
 1. Tambah Hewan
 2. Pindah Kandang
 3. Beri Makan
-4. Catat Kesehatan
+4. Cek Kesehatan
 5. Cek Data Hewan
 6. Hapus Hewan
 7. Keluar
 """)
 
-    pilihan = input("Pilih menu (1-7): ")
+    pilihan = input("Pilih menu : ")
 
-    # =====================================
+    # ==================================================
     # CREATE
-    # =====================================
+    # Menambahkan data hewan baru
+    # ==================================================
     if pilihan == "1":
 
-        print("\n=== TAMBAH HEWAN ===")
+        # Validasi nama tidak boleh kosong
+        while True:
+            nama = input("Nama Hewan : ").strip()
+            if nama:
+                break
 
-        nama = input("Nama Hewan  : ")
-        jenis = input("Jenis Hewan : ")
-        kelamin = input("Jenis Kelamin Hewan (Betina / Jantan) : ")
-        umur = input("Umur Hewan  : ")
+        # Validasi jenis hewan tidak boleh kosong
+        while True:
+            jenis = input("Jenis Hewan : ").strip()
+            if jenis:
+                break
 
+        # Validasi kelamin hanya Jantan atau Betina
+        while True:
+            kelamin = input(
+                "Kelamin (Jantan/Betina): "
+            ).capitalize()
+
+            if kelamin in [
+                "Jantan",
+                "Betina"
+            ]:
+                break
+
+        # Validasi umur tidak boleh kosong
+        while True:
+            umur = input(
+                "Umur Hewan : "
+            ).strip()
+
+            if umur:
+                break
+
+        # Membuat object hewan baru
         hewan = HewanKebunBinatang(
-    nama,
-    jenis,
-    kelamin,
-    umur
-)
+            nama,
+            jenis,
+            kelamin,
+            umur
+        )
 
-        print("\nData hewan berhasil ditambahkan.")
+        # Menambahkan object ke list
+        daftar_hewan.append(
+            hewan
+        )
 
-    # =====================================
-    # UPDATE KANDANG
-    # =====================================
-        daftar_hewan.append(hewan)
+        print(
+            "\nData berhasil ditambahkan."
+        )
 
-        print("\nData hewan berhasil ditambahkan.")
-
-    # =====================================
-    # UPDATE KANDANG
-    # =====================================
+    # ==================================================
+    # UPDATE
+    # Memindahkan kandang hewan
+    # ==================================================
     elif pilihan == "2":
 
-        print("\n=== PINDAH KANDANG ===")
+        nama = input(
+            "Nama Hewan : "
+        )
 
-        nama = input("Masukkan nama hewan : ")
-
-        hewan = cari_hewan(nama)
+        hewan = cari_hewan(
+            nama
+        )
 
         if hewan:
 
             print("""
-Pilihan Kandang:
-
 1. Kandang Anak-anak
 2. Kandang Umum
 3. Kandang Kawin
 """)
 
-            pilih = input("Pilih kandang : ")
+            pilih = input(
+                "Pilih : "
+            )
 
             kandang = {
                 "1": "Kandang Anak-anak",
                 "2": "Kandang Umum",
-                "3": "Kandang Kawin",
+                "3": "Kandang Kawin"
             }
 
             if pilih in kandang:
@@ -147,153 +197,229 @@ Pilihan Kandang:
                 )
 
                 print(
-                    "\nKandang berhasil diperbarui."
+                    "Kandang berhasil diperbarui."
                 )
 
-            else:
-
-                print(
-                    "\nPilihan kandang tidak valid."
-                )
-
-        else:
-
-            print(
-                "\nHewan tidak ditemukan."
-            )
-
-    # =====================================
-    # UPDATE MAKAN
-    # =====================================
+    # ==================================================
+    # UPDATE
+    # Memberikan makan berdasarkan jenis hewan
+    # Semua hewan dengan jenis yang sama
+    # akan mendapatkan jadwal makan yang sama
+    # ==================================================
     elif pilihan == "3":
 
-        print("\n=== PEMBERIAN MAKAN ===")
+        jenis_cari = input(
+            "Jenis Hewan : "
+        )
 
-        nama = input("Masukkan nama hewan : ")
+        ditemukan = False
 
-        hewan = cari_hewan(nama)
+        # Mengecek apakah jenis hewan ada
+        for h in daftar_hewan:
 
-        if hewan:
+            if (
+                h.get_jenis().lower()
+                ==
+                jenis_cari.lower()
+            ):
+                ditemukan = True
+                break
 
-            makanan = input(
-                "Jenis makanan : "
-            )
-
-            jam = input(
-                "Jam makan (contoh: 08:00) : "
-            )
-
-            hewan.beri_makan(
-                makanan,
-                jam
-            )
+        if not ditemukan:
 
             print(
-                "\nData makan berhasil disimpan."
+                "Jenis hewan tidak ditemukan."
             )
 
-        else:
+            continue
 
-            print(
-                "\nHewan tidak ditemukan."
+        # Input data makan
+        makanan = input(
+            "Jenis makanan : "
+        )
+
+        jam_awal = input(
+            "Start makan (contoh 08.00) : "
+        )
+
+        interval = int(
+            input(
+                "Berapa jam sekali makan : "
             )
+        )
 
-    # =====================================
-    # UPDATE KESEHATAN
-    # =====================================
+        # Mengubah string jam menjadi object waktu
+        waktu_awal = datetime.strptime(
+            jam_awal,
+            "%H.%M"
+        )
+
+        # Menghitung jadwal makan berikutnya
+        waktu_berikut = (
+            waktu_awal +
+            timedelta(
+                hours=interval
+            )
+        )
+
+        jadwal = waktu_berikut.strftime(
+            "%H.%M"
+        )
+
+        # Memberikan makanan ke semua hewan
+        # dengan jenis yang sama
+        for h in daftar_hewan:
+
+            if (
+                h.get_jenis().lower()
+                ==
+                jenis_cari.lower()
+            ):
+
+                h.beri_makan(
+                    makanan,
+                    jam_awal,
+                    jadwal
+                )
+
+        # Menampilkan hasil jadwal makan
+        print("\n=== JADWAL MAKAN ===")
+
+        print(
+            "Jenis Hewan :",
+            jenis_cari
+        )
+
+        print(
+            "Makanan :",
+            makanan
+        )
+
+        print(
+            "Start Makan :",
+            jam_awal
+        )
+
+        print(
+            "Jadwal Berikutnya :",
+            jadwal
+        )
+
+    # ==================================================
+    # UPDATE
+    # Mencatat kondisi kesehatan hewan
+    # ==================================================
     elif pilihan == "4":
 
-        print("\n=== CATAT KESEHATAN ===")
+        nama = input(
+            "Nama Hewan : "
+        )
 
-        nama = input("Masukkan nama hewan : ")
+        hewan = cari_hewan(
+            nama
+        )
 
-        hewan = cari_hewan(nama)
+        # Jika hewan tidak ditemukan
+        if not hewan:
 
-        if hewan:
-
-            kondisi = input(
-                "Kondisi kesehatan : "
+            print(
+                "Hewan tidak ditemukan."
             )
+
+            continue
+
+        status = input(
+            "Apakah hewan sakit? (YA/TIDAK): "
+        ).upper()
+
+        # Jika hewan sakit
+        if status == "YA":
 
             jam = input(
-                "Jam pemeriksaan (contoh: 08:00) : "
+                "Jadwal pemeriksaan (14.00): "
             )
 
+            # Otomatis pindah ke kandang isolasi
+            hewan.pindah_kandang(
+                "Kandang Isolasi"
+            )
+
+            # Simpan data kesehatan
             hewan.catat_kesehatan(
-                kondisi,
+                "Sakit",
                 jam
             )
 
             print(
-                "\nData kesehatan berhasil disimpan."
+                "Hewan dipindahkan ke Kandang Isolasi."
             )
 
-        else:
+        # Jika hewan sehat
+        elif status == "TIDAK":
+
+            # Otomatis kembali ke kandang umum
+            hewan.pindah_kandang(
+                "Kandang Umum"
+            )
+
+            # Jadwal pemeriksaan rutin
+            hewan.catat_kesehatan(
+                "Sehat",
+                "1 Bulan Sekali"
+            )
 
             print(
-                "\nHewan tidak ditemukan."
+                "Hewan sehat dan kembali ke Kandang Umum."
             )
 
-    # =====================================
+    # ==================================================
     # READ
-    # =====================================
+    # Menampilkan data hewan
+    # ==================================================
     elif pilihan == "5":
 
         print("""
-=========================
- CEK INFO HEWAN
-=========================
-
-1. Cek Info Hewan Satuan
-2. Cek Info Seluruh Hewan
+1. Cek Data Satuan
+2. Cek Semua Data
 """)
 
-        sub_menu = input(
-            "Pilih menu (1/2): "
+        sub = input(
+            "Pilih : "
         )
 
-        # Detail 1 hewan
-        if sub_menu == "1":
+        # Menampilkan satu hewan
+        if sub == "1":
 
             nama = input(
-                "Masukkan nama hewan : "
+                "Nama Hewan : "
             )
 
-            hewan = cari_hewan(nama)
+            hewan = cari_hewan(
+                nama
+            )
 
             if hewan:
 
                 hewan.tampilkan_info()
 
-            else:
-
-                print(
-                    "\nHewan tidak ditemukan."
-                )
-
-        # Seluruh hewan
-        elif sub_menu == "2":
+        # Menampilkan seluruh hewan
+        elif sub == "2":
 
             tampilkan_semua()
 
-        else:
-
-            print(
-                "\nPilihan tidak valid."
-            )
-
-    # =====================================
+    # ==================================================
     # DELETE
-    # =====================================
+    # Menghapus data hewan
+    # ==================================================
     elif pilihan == "6":
 
-        print("\n=== HAPUS DATA HEWAN ===")
-
         nama = input(
-            "Masukkan nama hewan : "
+            "Nama Hewan : "
         )
 
-        hewan = cari_hewan(nama)
+        hewan = cari_hewan(
+            nama
+        )
 
         if hewan:
 
@@ -302,28 +428,16 @@ Pilihan Kandang:
             )
 
             print(
-                "\nData berhasil dihapus."
+                "Data berhasil dihapus."
             )
 
-        else:
-
-            print(
-                "\nHewan tidak ditemukan."
-            )
-
-    # =====================================
-    # KELUAR
-    # =====================================
+    # ==================================================
+    # KELUAR PROGRAM
+    # ==================================================
     elif pilihan == "7":
 
         print(
-            "\nTerima kasih telah menggunakan sistem."
+            "Terima kasih."
         )
 
         break
-
-    else:
-
-        print(
-            "\nMenu tidak valid."
-        )
